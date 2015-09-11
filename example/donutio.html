@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery Donutio plugin example</title>
+  <meta name="description" content="jQuery Donutio plugin example">
+  <meta name="author" content="Michael Hohlovich">
+  <script src="js/jquery.min.js"></script>
+  <script src="../js/jquery.donutio.js"></script>
+  <script>
+    var data = [
+      {
+        value: -628,
+        text: ["46%", "-628.<span>00</span>", "Groceries"]
+      },
+      {
+        value: -310,
+        text: ["28%", "-310.<span>00</span>", "Cafe and restaurants"]
+      },
+      {
+        value: -186,
+        text: ["20%", "-186.<span>00</span>", "Lunches"]
+      },
+      {
+        value: -100,
+        text: ["6%", "-628.<span>00</span>", "Alcohol and bars"]
+      }
+    ];
+    $(document).ready(function(){
+      $("#wrap").donutio({
+        data: data,
+        radius: 70,
+        width: 10,
+        color: "#D2494B",
+        backColor: "#F5DADA"
+      });
+    });
+  </script>
+  <style type="text/css">
+    .donut {
+      float: left;
+      position: relative;
+    }
+    .donut > span {
+      display: block;
+      text-align: center;
+      position: absolute;
+      width: 100%;
+      font-size: 14px;
+    }
+    .donut > span > span {
+      font-size: 10px;
+    }
+    .donut > span.value-0 {
+      top: 60px;
+    }
+    .donut > span.value-1 {
+      top: 80px;
+    }
+    .donut > span.value-2 {
+
+    }
+  </style>
+</head>
+<body>
+  <div id="wrap"></div>
+</body>
+</html>

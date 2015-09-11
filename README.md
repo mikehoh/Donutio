@@ -1,2 +1,59 @@
-# Donutio
-Donut charts plugin
+Donutio 1.0
+=====
+
+jQuery.Donutio - plugin that draws donut charts.
+
+**Using example**
+
+```
+  $("#wrap").donutio({
+    data: data,
+    radius: 70,
+    width: 10,
+    padding: 10,
+    color: "#D2494B",
+    backColor: "#F5DADA"
+  });
+```
+
+Where is data is an array of objects with two keys – value and text.
+Value must contain a number (ex. 12, -50, 38...).
+Text is array of strings (ex. ["Label", "100", "<span>23</span>", ...])
+It can contain html tags.
+Each string will be placed into a separate html tag with unique class name.
+
+Radius - radius of donut chart
+
+Width - donut line width
+
+Padding - the distance between chart and its container
+
+Color - highlighted segment color
+
+backColor - non-active segments color
+
+
+**Data example**
+
+```
+[
+  {
+    value: -628,
+    text: ["46%", "-628.<span>00</span>", "Groceries"]
+  },
+  {
+    value: -310,
+    text: ["28%", "-310.<span>00</span>", "Cafe and restaurants"]
+  },
+  {
+    value: -186,
+    text: ["20%", "-186.<span>00</span>", "Lunches"]
+  },
+  {
+    value: -100,
+    text: ["6%", "-628.<span>00</span>", "Alcohol and bars"]
+  }
+]
+```
+
+The plugin will draw four donut charts with text and highlighted value segment.
