@@ -1,0 +1,2 @@
+# Donutio
+Donut charts plugin
