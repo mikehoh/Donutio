@@ -1,4 +1,4 @@
-Donutio 1.0
+Donutio 2.0
 =====
 
 jQuery.Donutio - plugin that draws donut charts.
@@ -7,6 +7,7 @@ jQuery.Donutio - plugin that draws donut charts.
 
 ```
   $("#wrap").donutio({
+    type: "donut",
     data: data,
     radius: 70,
     width: 10,
@@ -22,9 +23,11 @@ Text is array of strings (ex. ["Label", "100", "<span>23</span>", ...])
 It can contain html tags.
 Each string will be placed into a separate html tag with unique class name.
 
+Type - "donut" or "pie", see example on preview
+
 Radius - radius of donut chart
 
-Width - donut line width
+Width - donut line width. Don't need to indicate this parameter if you want pie-chart.
 
 Padding - the distance between chart and its container
 

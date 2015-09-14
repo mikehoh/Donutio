@@ -28,15 +28,27 @@
     ];
     $(document).ready(function(){
       $("#wrap").donutio({
+        type: "donut",
         data: data,
         radius: 70,
-        width: 10,
+        width: 8,
+        color: "#D2494B",
+        backColor: "#F5DADA"
+      });
+      $("#wrap-2").donutio({
+        type: "pie",
+        data: data,
+        radius: 70,
         color: "#D2494B",
         backColor: "#F5DADA"
       });
     });
   </script>
   <style type="text/css">
+    #wrap, #wrap-2 {
+      clear: both;
+      padding-top: 100px;
+    }
     .donut {
       float: left;
       position: relative;
@@ -57,12 +69,14 @@
     .donut > span.value-1 {
       top: 80px;
     }
-    .donut > span.value-2 {
-
+    #wrap-2 .donut > span {
+      position: inherit;
+      top: auto;
     }
   </style>
 </head>
 <body>
   <div id="wrap"></div>
+  <div id="wrap-2"></div>
 </body>
 </html>
