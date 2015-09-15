@@ -1,4 +1,4 @@
-Donutio 2.0
+Donutio 2.1
 =====
 
 jQuery.Donutio - plugin that draws donut charts.
@@ -7,6 +7,7 @@ jQuery.Donutio - plugin that draws donut charts.
 
 ```
   $("#wrap").donutio({
+    multiple: true,
     type: "donut",
     data: data,
     radius: 70,
@@ -24,6 +25,10 @@ It can contain html tags.
 Each string will be placed into a separate html tag with unique class name.
 
 Type - "donut" or "pie", see example on preview
+
+Multiple - indicates that each data item should be drawn separately. By default true.
+In case of false, you have to add the parameter "active" with data item array index.
+For example, active: 2.
 
 Radius - radius of donut chart
 
@@ -60,3 +65,4 @@ backColor - non-active segments color
 ```
 
 The plugin will draw four donut charts with text and highlighted value segment.
+(if multiple:true or without multiple option)

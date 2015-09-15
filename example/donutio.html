@@ -35,6 +35,7 @@
         color: "#D2494B",
         backColor: "#F5DADA"
       });
+
       $("#wrap-2").donutio({
         type: "pie",
         data: data,
@@ -42,12 +43,23 @@
         color: "#D2494B",
         backColor: "#F5DADA"
       });
+
+      $("#wrap-3").donutio({
+        multiple: false,
+        type: "donut",
+        data: data,
+        active: 1,
+        radius: 70,
+        width: 8,
+        color: "#D2494B",
+        backColor: "#F5DADA"
+      });
     });
   </script>
   <style type="text/css">
-    #wrap, #wrap-2 {
+    #wrap, #wrap-2, #wrap-3 {
       clear: both;
-      padding-top: 100px;
+      padding-top: 70px;
     }
     .donut {
       float: left;
@@ -78,5 +90,6 @@
 <body>
   <div id="wrap"></div>
   <div id="wrap-2"></div>
+  <div id="wrap-3"></div>
 </body>
 </html>
