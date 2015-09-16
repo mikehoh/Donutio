@@ -1,4 +1,4 @@
-/* Donutio 2.1 by Michael Hohlovich */
+/* Donutio 2.2 by Michael Hohlovich */
 (function( $ ) {
   $.fn.donutio = function(params) {
     var options = $.extend({
@@ -67,10 +67,12 @@
 
     $donutContainer.append(svg);
 
-    options.data[current].text.forEach(function(value, index){
-      var $text = $("<span class='value-" + index + "' />").html(value);
-      $donutContainer.append($text);
-    });
+    if ("text" in options.data[current]) {
+      options.data[current].text.forEach(function(value, index){
+        var $text = $("<span class='value-" + index + "' />").html(value);
+        $donutContainer.append($text);
+      });
+    };
 
     $wrap.append($donutContainer);
   };
