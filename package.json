@@ -1,0 +1,16 @@
+{
+  "name": "donutio",
+  "version": "2.2",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mikehoh/Donutio.git"
+  },
+  "keywords": [
+    "chart",
+    "charts",
+    "donut",
+    "pie",
+    "pie-chart",
+    "donut-chart"
+  ]
+}
