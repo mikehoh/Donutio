@@ -1,4 +1,4 @@
-/* Donutio 2.2 by Michael Hohlovich */
+/* Donutio 2.2.0 by Michael Hohlovich */
 (function( $ ) {
   $.fn.donutio = function(params) {
     var options = $.extend({
