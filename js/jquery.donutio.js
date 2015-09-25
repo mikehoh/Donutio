@@ -1,5 +1,5 @@
 /* Donutio 2.2.0 by Michael Hohlovich */
-(function( $ ) {
+(function($) {
   $.fn.donutio = function(params) {
     var options = $.extend({
       "multiple": true,
