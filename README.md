@@ -1,4 +1,4 @@
-Donutio 2.2.0
+Donutio 2.3.0
 =====
 
 jQuery.Donutio - plugin that draws donut charts.
@@ -13,8 +13,9 @@ jQuery.Donutio - plugin that draws donut charts.
     radius: 70,
     width: 10,
     padding: 10,
-    color: "#D2494B",
-    backColor: "#F5DADA"
+    color_negative: "#D2494B",
+    color_positive: "#55A647",
+    percents: true
   });
 ```
 
@@ -36,9 +37,11 @@ Width - donut line width. Don't need to indicate this parameter if you want pie-
 
 Padding - the distance between chart and its container
 
-Color - highlighted segment color
+color_negative - highlighted segment color with negative value
 
-backColor - non-active segments color
+color_positive - highlighted segment color with positive value
+
+Percents - If true, it calculates percents to show, depending on given values in data.
 
 
 **Data example**

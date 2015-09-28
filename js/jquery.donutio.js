@@ -1,4 +1,4 @@
-/* Donutio 2.2.0 by Michael Hohlovich */
+/* Donutio 2.3.0 by Michael Hohlovich */
 (function($) {
   $.fn.donutio = function(params) {
     var options = $.extend({
@@ -21,16 +21,16 @@
 
     if (options.multiple) {
       for (i = 0; i < dataLength; i++) {
-        drawChart(containerSize, gap, options, offsets, i, this);
+        drawChart(containerSize, gap, options, offsets, i, this, sum);
       };
     } else {
-      drawChart(containerSize, gap, options, offsets, options.active, this);
+      drawChart(containerSize, gap, options, offsets, options.active, this, sum);
     };
 
     return this;
   };
 
-  var drawChart = function(containerSize, gap, options, offsets, current, $wrap) {
+  var drawChart = function(containerSize, gap, options, offsets, current, $wrap, sum) {
     var $donutContainer = createContainer(containerSize);
 
     var svg = createSvgElement("svg");
@@ -44,21 +44,23 @@
       dashoffset = newoffset + gap;
       newoffset = dashoffset + offsets[j];
 
+      var color = setColorsForValue(options, current);
+
       var path = createSvgElement("path");
       if (options.type == "donut") {
         path.setAttribute("stroke-width", options.width);
         path.setAttribute("fill", "none");
         if (j == current) {
-          path.setAttribute("stroke", options.color);
+          path.setAttribute("stroke", color.active);
         } else {
-          path.setAttribute("stroke", options.backColor);
+          path.setAttribute("stroke", color.muted);
         }
       } else {
         path.setAttribute("stroke-width", 0);
         if (j == current) {
-          path.setAttribute("fill", options.color);
+          path.setAttribute("fill", color.active);
         } else {
-          path.setAttribute("fill", options.backColor);
+          path.setAttribute("fill", color.muted);
         }
       }
       path.setAttribute("d", describeArc(options.type, Math.floor(containerSize / 2), Math.floor(containerSize / 2), options.radius, dashoffset, newoffset));
@@ -67,9 +69,15 @@
 
     $donutContainer.append(svg);
 
+    if (options.percents) {
+      var percent = (Math.round(Math.abs(options.data[current].value) / sum * 10000) / 100).toString() + "%";
+      var $text = $("<span class='value-percent' />").html(percent);
+      $donutContainer.append($text);
+    };
+
     if ("text" in options.data[current]) {
       options.data[current].text.forEach(function(value, index){
-        var $text = $("<span class='value-" + index + "' />").html(value);
+        $text = $("<span class='value-" + index + "' />").html(value);
         $donutContainer.append($text);
       });
     };
@@ -134,6 +142,42 @@
       x: centerX + (radius * Math.cos(angleInRadians)),
       y: centerY + (radius * Math.sin(angleInRadians))
     };
+  };
+
+  var setColorsForValue = function(options, current) {
+    var value = options.data[current].value;
+    if (value > 0) {
+      return {
+        active: options.color_positive,
+        muted:  shadeBlendConvert(0.8, options.color_positive, "#fff")
+      }
+    } else {
+      return {
+        active: options.color_negative,
+        muted:  shadeBlendConvert(0.8, options.color_negative, "#fff")
+      }
+    };
+  };
+
+  // function from http://stackoverflow.com/a/13542669
+  var shadeBlendConvert = function(p, from, to) {
+    if(typeof(p)!="number"||p<-1||p>1||typeof(from)!="string"||(from[0]!='r'&&from[0]!='#')||(typeof(to)!="string"&&typeof(to)!="undefined"))return null; //ErrorCheck
+    if(!this.sbcRip)this.sbcRip=function(d){
+      var l=d.length,RGB=new Object();
+      if(l>9){
+        d=d.split(",");
+        if(d.length<3||d.length>4)return null;//ErrorCheck
+        RGB[0]=i(d[0].slice(4)),RGB[1]=i(d[1]),RGB[2]=i(d[2]),RGB[3]=d[3]?parseFloat(d[3]):-1;
+      }else{
+        switch(l){case 8:case 6:case 3:case 2:case 1:return null;} //ErrorCheck
+        if(l<6)d="#"+d[1]+d[1]+d[2]+d[2]+d[3]+d[3]+(l>4?d[4]+""+d[4]:""); //3 digit
+        d=i(d.slice(1),16),RGB[0]=d>>16&255,RGB[1]=d>>8&255,RGB[2]=d&255,RGB[3]=l==9||l==5?r(((d>>24&255)/255)*10000)/10000:-1;
+      }
+      return RGB;}
+    var i=parseInt,r=Math.round,h=from.length>9,h=typeof(to)=="string"?to.length>9?true:to=="c"?!h:false:h,b=p<0,p=b?p*-1:p,to=to&&to!="c"?to:b?"#000000":"#FFFFFF",f=sbcRip(from),t=sbcRip(to);
+    if(!f||!t)return null; //ErrorCheck
+    if(h)return "rgb("+r((t[0]-f[0])*p+f[0])+","+r((t[1]-f[1])*p+f[1])+","+r((t[2]-f[2])*p+f[2])+(f[3]<0&&t[3]<0?")":","+(f[3]>-1&&t[3]>-1?r(((t[3]-f[3])*p+f[3])*10000)/10000:t[3]<0?f[3]:t[3])+")");
+    else return "#"+(0x100000000+(f[3]>-1&&t[3]>-1?r(((t[3]-f[3])*p+f[3])*255):t[3]>-1?r(t[3]*255):f[3]>-1?r(f[3]*255):255)*0x1000000+r((t[0]-f[0])*p+f[0])*0x10000+r((t[1]-f[1])*p+f[1])*0x100+r((t[2]-f[2])*p+f[2])).toString(16).slice(f[3]>-1||t[3]>-1?1:3);
   };
 
 })(jQuery);
