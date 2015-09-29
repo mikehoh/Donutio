@@ -1,4 +1,4 @@
-Donutio 2.3.0
+Donutio 2.4.0
 =====
 
 jQuery.Donutio - plugin that draws donut charts.
@@ -15,15 +15,18 @@ jQuery.Donutio - plugin that draws donut charts.
     padding: 10,
     color_negative: "#D2494B",
     color_positive: "#55A647",
-    percents: true
+    percents: true,
+    colored_percents: true
   });
 ```
 
-Where is data is an array of objects with two keys – value and text.
+Where is data is an array of objects with keys – value, text, url, id.
 Value must contain a number (ex. 12, -50, 38...).
 Text is array of strings (ex. ["Label", "100", "<span>23</span>", ...])
 It can contain html tags.
 Each string will be placed into a separate html tag with unique class name.
+Url - if it exists, the donut container will be wrapped into link with indicated url.
+Id - should contain any unique data about current object.
 
 Type - "donut" or "pie", see example on preview
 
@@ -43,6 +46,10 @@ color_positive - highlighted segment color with positive value
 
 Percents - If true, it calculates percents to show, depending on given values in data.
 
+Colored-percents - true/false, makes coloured percent value (color depends on value)
+
+onclick - callback function, accepts item argument with value from id key.
+
 
 **Data example**
 
@@ -54,7 +61,8 @@ Percents - If true, it calculates percents to show, depending on given values in
   },
   {
     value: -310,
-    text: ["28%", "-310.<span>00</span>", "Cafe and restaurants"]
+    text: ["28%", "-310.<span>00</span>", "Cafe and restaurants"],
+    id: "310-Cafes"
   },
   {
     value: -186,
@@ -62,7 +70,8 @@ Percents - If true, it calculates percents to show, depending on given values in
   },
   {
     value: -100,
-    text: ["6%", "-628.<span>00</span>", "Alcohol and bars"]
+    text: ["6%", "-628.<span>00</span>", "Alcohol and bars"],
+    url: "#bars"
   }
 ]
 ```

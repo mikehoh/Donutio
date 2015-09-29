@@ -1,33 +1,61 @@
-/* Donutio 2.3.0 by Michael Hohlovich */
+/* Donutio 2.4.0 by Michael Hohlovich */
 (function($) {
-  $.fn.donutio = function(params) {
-    var options = $.extend({
-      "multiple": true,
-      "color": "#f00",
-      "backColor": "#eee",
-      "radius": 200,
-      "width": 10,
-      "padding": 10,
-      "type": "donut",
-      "active": 0
-    }, params);
 
-    var containerSize = (options.radius + options.padding) * 2;
-    var dataLength = options.data.length;
+  var init = function(params) {
+    return this.each(function(){
+      var options = $.extend({
+        "multiple": true,
+        "color_negative": "#f00",
+        "color_positive": "#0f0",
+        "radius": 200,
+        "width": 10,
+        "padding": 10,
+        "type": "donut",
+        "active": 0,
+        "percents": false,
+        "colored_percents": false
+      }, params);
 
-    var sum = dataSum(options.data);
-    var offsets = getDataPositions(options.data, sum);
-    var gap = (360 - offsets.reduce(function(a, b){return a + b})) / dataLength;
+      var containerSize = (options.radius + options.padding) * 2;
+      var dataLength = options.data.length;
 
-    if (options.multiple) {
-      for (i = 0; i < dataLength; i++) {
-        drawChart(containerSize, gap, options, offsets, i, this, sum);
+      var sum = dataSum(options.data);
+      var offsets = getDataPositions(options.data, sum);
+      var gap = (360 - offsets.reduce(function(a, b){return a + b})) / dataLength;
+
+      if (options.multiple) {
+        for (i = 0; i < dataLength; i++) {
+          drawChart(containerSize, gap, options, offsets, i, $(this), sum);
+        };
+      } else {
+        drawChart(containerSize, gap, options, offsets, options.active, $(this), sum);
       };
-    } else {
-      drawChart(containerSize, gap, options, offsets, options.active, this, sum);
-    };
+    });
+  };
 
-    return this;
+  var destroy = function() {
+    return this.each(function(){
+      var $donuts = $(this).find(".donut");
+      $donuts.each(function(index, donut) {
+        $(donut).off();
+      });
+      $(this).empty();
+    });
+  };
+
+  var methods = {
+    init: init,
+    destroy: destroy
+  };
+
+  $.fn.donutio = function(options) {
+    if (methods[options]) {
+      return methods[options].apply(this, Array.prototype.slice.call(arguments, 1));
+    } else if (typeof options === "object" || !options) {
+      return methods.init.apply(this, arguments);
+    } else {
+      $.error("Method " + options + " does not exist on jQuery.Donutio");
+    };
   };
 
   var drawChart = function(containerSize, gap, options, offsets, current, $wrap, sum) {
@@ -72,6 +100,9 @@
     if (options.percents) {
       var percent = (Math.round(Math.abs(options.data[current].value) / sum * 10000) / 100).toString() + "%";
       var $text = $("<span class='value-percent' />").html(percent);
+      if (options.colored_percents) {
+        $text.css("color", color.active);
+      };
       $donutContainer.append($text);
     };
 
@@ -82,7 +113,20 @@
       });
     };
 
-    $wrap.append($donutContainer);
+    if ("url" in options.data[current]) {
+      var url = options.data[current].url;
+      var $a = $("<a href='" + url + "' />").html($donutContainer);
+      $wrap.append($a);
+    } else {
+      $wrap.append($donutContainer);
+      if ($.isFunction(options.onclick)) {
+        var callback = options.onclick;
+        $donutContainer.on("click", function(event) {
+          event.preventDefault();
+          callback(options.data[current].id);
+        });
+      };
+    };
   };
 
   var dataSum = function(data) {
@@ -104,7 +148,7 @@
   };
 
   var createContainer = function(size) {
-    return $("<div class='donut' />").css({"width": size, "height": size});
+    return $("<div class='donut' />").css({"width": size});
   };
 
   var createSvgElement = function(name) {

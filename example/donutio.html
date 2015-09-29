@@ -8,6 +8,28 @@
   <script src="js/jquery.min.js"></script>
   <script src="../js/jquery.donutio.js"></script>
   <script>
+    var data3 = [
+      {
+        value: 628,
+        text: ["-628.<span>00</span>", "Groceries"],
+        id: "628-Groceries"
+      },
+      {
+        value: -310,
+        text: ["-310.<span>00</span>", "Cafe and restaurants"],
+        id: "310-Cafes"
+      },
+      {
+        value: 186,
+        text: ["-186.<span>00</span>", "Lunches"],
+        url: "#lunches"
+      },
+      {
+        value: -100,
+        text: ["-628.<span>00</span>", "Alcohol and bars"],
+        url: "#bars"
+      }
+    ];
     var data = [
       {
         value: -628,
@@ -52,7 +74,8 @@
         width: 8,
         color_negative: "#D2494B",
         color_positive: "#55A647",
-        percents: true
+        percents: true,
+        colored_percents: true
       });
 
       $("#wrap-2").donutio({
@@ -73,10 +96,26 @@
         color_negative: "#D2494B",
         color_positive: "#55A647"
       });
+
+      $("#wrap-4").donutio({
+        type: "donut",
+        data: data3,
+        radius: 70,
+        width: 8,
+        color_negative: "#D2494B",
+        color_positive: "#55A647",
+        percents: true,
+        colored_percents: true,
+        onclick: function(item) { alert(item); }
+      });
+
+      $("#destroy").click(function(event){
+        $("#wrap-4").donutio("destroy");
+      });
     });
   </script>
   <style type="text/css">
-    #wrap, #wrap-2, #wrap-3 {
+    #wrap, #wrap-2, #wrap-3, #wrap-4 {
       clear: both;
       padding-top: 70px;
     }
@@ -113,5 +152,7 @@
   <div id="wrap"></div>
   <div id="wrap-2"></div>
   <div id="wrap-3"></div>
+  <div id="wrap-4"></div>
+  <button id="destroy">Destroy</button>
 </body>
 </html>
