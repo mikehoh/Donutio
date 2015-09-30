@@ -1,4 +1,4 @@
-/* Donutio 2.4.1 by Michael Hohlovich */
+/* Donutio 2.4.2 by Michael Hohlovich */
 (function($) {
 
   var init = function(params) {
@@ -71,10 +71,18 @@
     for (j = 0; j < options.data.length; j++) {
       dashoffset = newoffset + gap;
       newoffset = dashoffset + offsets[j];
-
       var color = setColorsForValue(options, current);
 
-      var path = createSvgElement("path");
+      if (dashoffset == 0 && newoffset == 360) {
+        var path = createSvgElement("circle");
+        path.setAttribute("cx", containerSize / 2);
+        path.setAttribute("cy", containerSize / 2);
+        path.setAttribute("r", options.radius);
+      } else {
+        var path = createSvgElement("path");
+        path.setAttribute("d", describeArc(options.type, Math.floor(containerSize / 2), Math.floor(containerSize / 2), options.radius, dashoffset, newoffset));
+      };
+
       if (options.type == "donut") {
         path.setAttribute("stroke-width", options.width);
         path.setAttribute("fill", "none");
@@ -91,7 +99,7 @@
           path.setAttribute("fill", color.muted);
         }
       }
-      path.setAttribute("d", describeArc(options.type, Math.floor(containerSize / 2), Math.floor(containerSize / 2), options.radius, dashoffset, newoffset));
+
       svg.appendChild(path);
     }
 
