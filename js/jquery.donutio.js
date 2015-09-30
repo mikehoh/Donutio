@@ -1,4 +1,4 @@
-/* Donutio 2.4.0 by Michael Hohlovich */
+/* Donutio 2.4.1 by Michael Hohlovich */
 (function($) {
 
   var init = function(params) {
@@ -140,7 +140,11 @@
   var getDataPositions = function(data, sum) {
     var offsets = [];
     data.forEach(function(obj, index){
-      var percent = Math.floor(Math.abs(obj.value) / sum * 100);
+      var percentFraction = Math.abs(obj.value) / sum * 100;
+      var percent = Math.floor(percentFraction);
+      if (percentFraction > 0.005 && percentFraction <= 1) {
+        percent = 1;
+      };
       var offset = Math.ceil(360 / 100 * percent);
       offsets.push(offset);
     });
