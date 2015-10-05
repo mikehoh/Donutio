@@ -1,4 +1,4 @@
-/* Donutio 2.4.2 by Michael Hohlovich */
+/* Donutio 2.4.3 by Michael Hohlovich */
 (function($) {
 
   var init = function(params) {
@@ -20,8 +20,9 @@
       var dataLength = options.data.length;
 
       var sum = dataSum(options.data);
-      var offsets = getDataPositions(options.data, sum);
-      var gap = (360 - offsets.reduce(function(a, b){return a + b})) / dataLength;
+      var correctedOffsets = getGapAndOffsets(getDataPositions(options.data, sum), dataLength);
+      var gap = correctedOffsets[0];
+      var offsets = correctedOffsets[1];
 
       if (options.multiple) {
         for (i = 0; i < dataLength; i++) {
@@ -157,6 +158,21 @@
       offsets.push(offset);
     });
     return offsets;
+  };
+
+  var getGapAndOffsets = function(offsets, dataLength) {
+    var diff = 360 - offsets.reduce(function(a, b){return a + b});
+    var gap =  diff / dataLength;
+    if (gap < 1 || gap > 1.5) {
+      var gap_diff = gap - 1.5;
+      offsets = offsets.map(function(offset){return offset + gap_diff;});
+      gap = 1.5;
+    };
+    if (offsets.length == 1) {
+      offsets = [360];
+      gap = 0;
+    };
+    return [gap, offsets];
   };
 
   var createContainer = function(size) {
