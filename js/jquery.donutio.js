@@ -1,4 +1,4 @@
-/* Donutio 2.4.3 by Michael Hohlovich */
+/* Donutio 2.4.4 by Michael Hohlovich */
 (function($) {
 
   var init = function(params) {
@@ -18,6 +18,10 @@
 
       var containerSize = (options.radius + options.padding) * 2;
       var dataLength = options.data.length;
+
+      if (dataLength == 0) {
+        return;
+      };
 
       var sum = dataSum(options.data);
       var correctedOffsets = getGapAndOffsets(getDataPositions(options.data, sum), dataLength);

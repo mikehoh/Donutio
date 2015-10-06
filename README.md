@@ -1,4 +1,4 @@
-Donutio 2.4.3
+Donutio 2.4.4
 =====
 
 jQuery.Donutio - plugin that draws donut charts.
