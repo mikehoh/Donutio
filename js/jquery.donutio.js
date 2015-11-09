@@ -1,4 +1,4 @@
-/* Donutio 2.4.6 by Michael Hohlovich */
+/* Donutio 2.4.7 by Michael Hohlovich */
 (function($) {
 
   var init = function(params) {
@@ -7,6 +7,7 @@
         "multiple": true,
         "color_negative": "#f00",
         "color_positive": "#0f0",
+        "color_zero": "#ddd",
         "radius": 200,
         "width": 10,
         "padding": 10,
@@ -231,10 +232,15 @@
         active: options.color_positive,
         muted:  shadeBlendConvert(0.8, options.color_positive, "#fff")
       }
-    } else {
+    } else if (value < 0) {
       return {
         active: options.color_negative,
         muted:  shadeBlendConvert(0.8, options.color_negative, "#fff")
+      }
+    } else {
+      return {
+        active: options.color_zero,
+        muted: options.color_zero
       }
     };
   };
