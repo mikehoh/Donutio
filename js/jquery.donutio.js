@@ -1,4 +1,4 @@
-/* Donutio 2.4.8 by Michael Hohlovich */
+/* Donutio 2.5.0 by Michael Hohlovich */
 (function($) {
 
   var init = function(params) {
@@ -25,16 +25,18 @@
       };
 
       var sum = dataSum(options.data);
-      var correctedOffsets = getGapAndOffsets(getDataPositions(options.data, sum), dataLength);
+      var dataPositions = getDataPositions(options.data, sum);
+      var correctedOffsets = getGapAndOffsets(dataPositions[0], dataLength);
+      var correctedPercents = getCorrectedPercents(dataPositions[1]);
       var gap = correctedOffsets[0];
       var offsets = correctedOffsets[1];
 
       if (options.multiple) {
         for (i = 0; i < dataLength; i++) {
-          drawChart(containerSize, gap, options, offsets, i, $(this), sum);
+          drawChart(containerSize, gap, options, offsets, i, $(this), sum, correctedPercents[i]);
         };
       } else {
-        drawChart(containerSize, gap, options, offsets, options.active, $(this), sum);
+        drawChart(containerSize, gap, options, offsets, options.active, $(this), sum, correctedPercents[options.active]);
       };
     });
   };
@@ -64,7 +66,7 @@
     };
   };
 
-  var drawChart = function(containerSize, gap, options, offsets, current, $wrap, sum) {
+  var drawChart = function(containerSize, gap, options, offsets, current, $wrap, sum, percent) {
     var $donutContainer = createContainer(containerSize);
 
     var svg = createSvgElement("svg");
@@ -112,11 +114,6 @@
     $donutContainer.append(svg);
 
     if (options.percents) {
-      var currentValue = options.data[current].value;
-      var percent = 0;
-      if (currentValue != 0) {
-        percent = Math.round(Math.abs(options.data[current].value) / sum * 10000) / 100;
-      }
       var $text = $("<span class='value-percent' />").html(percent.toString() + "%");
       if (options.colored_percents) {
         $text.css("color", color.active);
@@ -156,17 +153,19 @@
   };
 
   var getDataPositions = function(data, sum) {
-    var offsets = [];
+    var offsets = [],
+        percents = [];
     data.forEach(function(obj, index){
-      var percentFraction = Math.abs(obj.value) / sum * 100;
-      var percent = Math.floor(percentFraction);
+      var percentFraction = Math.round(Math.abs(obj.value) / sum * 10000) / 100;
+      var percent = percentFraction;
       if (percentFraction > 0.005 && percentFraction <= 1) {
         percent = 1;
       };
       var offset = Math.ceil(360 / 100 * percent);
       offsets.push(offset);
+      percents.push(percent);
     });
-    return offsets;
+    return [offsets, percents];
   };
 
   var getGapAndOffsets = function(offsets, dataLength) {
@@ -182,6 +181,14 @@
       gap = 0;
     };
     return [gap, offsets];
+  };
+
+  var getCorrectedPercents = function(percents) {
+    var sum = percents.reduce(function(a, b){return a + b});
+    var diff = Math.round((100 - sum) * 100) / 100;
+    var maxIndex = percents.reduce(function(iMax,x,i,a) {return x > a[iMax] ? i : iMax;}, 0);
+    percents[maxIndex] = Math.round((percents[maxIndex] + diff) * 100) / 100;
+    return percents;
   };
 
   var createContainer = function(size) {
