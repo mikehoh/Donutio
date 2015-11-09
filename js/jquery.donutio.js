@@ -1,4 +1,4 @@
-/* Donutio 2.4.7 by Michael Hohlovich */
+/* Donutio 2.4.8 by Michael Hohlovich */
 (function($) {
 
   var init = function(params) {
@@ -227,12 +227,12 @@
 
   var setColorsForValue = function(options, current) {
     var value = options.data[current].value;
-    if (value > 0) {
+    if (value > 0.005) {
       return {
         active: options.color_positive,
         muted:  shadeBlendConvert(0.8, options.color_positive, "#fff")
       }
-    } else if (value < 0) {
+    } else if (value < -0.005) {
       return {
         active: options.color_negative,
         muted:  shadeBlendConvert(0.8, options.color_negative, "#fff")
