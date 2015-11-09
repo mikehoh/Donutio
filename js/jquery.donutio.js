@@ -1,4 +1,4 @@
-/* Donutio 2.4.5 by Michael Hohlovich */
+/* Donutio 2.4.6 by Michael Hohlovich */
 (function($) {
 
   var init = function(params) {
@@ -114,7 +114,7 @@
       var currentValue = options.data[current].value;
       var percent = 0;
       if (currentValue != 0) {
-        percent = (Math.round(Math.abs(options.data[current].value) / sum * 10000) / 100).toString() + "%";
+        percent = Math.round(Math.abs(options.data[current].value) / sum * 10000) / 100;
       }
       var $text = $("<span class='value-percent' />").html(percent.toString() + "%");
       if (options.colored_percents) {
