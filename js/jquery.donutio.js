@@ -1,4 +1,4 @@
-/* Donutio 2.5.0 by Michael Hohlovich */
+/* Donutio 2.5.1 by Michael Hohlovich */
 (function($) {
 
   var init = function(params) {
@@ -27,16 +27,15 @@
       var sum = dataSum(options.data);
       var dataPositions = getDataPositions(options.data, sum);
       var correctedOffsets = getGapAndOffsets(dataPositions[0], dataLength);
-      var correctedPercents = getCorrectedPercents(dataPositions[1]);
       var gap = correctedOffsets[0];
       var offsets = correctedOffsets[1];
 
       if (options.multiple) {
         for (i = 0; i < dataLength; i++) {
-          drawChart(containerSize, gap, options, offsets, i, $(this), sum, correctedPercents[i]);
+          drawChart(containerSize, gap, options, offsets, i, $(this), sum, dataPositions[2][i]);
         };
       } else {
-        drawChart(containerSize, gap, options, offsets, options.active, $(this), sum, correctedPercents[options.active]);
+        drawChart(containerSize, gap, options, offsets, options.active, $(this), sum, dataPositions[2][options.active]);
       };
     });
   };
@@ -154,7 +153,8 @@
 
   var getDataPositions = function(data, sum) {
     var offsets = [],
-        percents = [];
+        percents = [],
+        realPercents = [];
     data.forEach(function(obj, index){
       var percentFraction = Math.round(Math.abs(obj.value) / sum * 10000) / 100;
       var percent = percentFraction;
@@ -164,8 +164,9 @@
       var offset = Math.ceil(360 / 100 * percent);
       offsets.push(offset);
       percents.push(percent);
+      realPercents.push(percentFraction);
     });
-    return [offsets, percents];
+    return [offsets, percents, realPercents];
   };
 
   var getGapAndOffsets = function(offsets, dataLength) {
@@ -181,14 +182,6 @@
       gap = 0;
     };
     return [gap, offsets];
-  };
-
-  var getCorrectedPercents = function(percents) {
-    var sum = percents.reduce(function(a, b){return a + b});
-    var diff = Math.round((100 - sum) * 100) / 100;
-    var maxIndex = percents.reduce(function(iMax,x,i,a) {return x > a[iMax] ? i : iMax;}, 0);
-    percents[maxIndex] = Math.round((percents[maxIndex] + diff) * 100) / 100;
-    return percents;
   };
 
   var createContainer = function(size) {
