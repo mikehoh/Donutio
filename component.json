@@ -1,9 +1,12 @@
 
 {
   "name": "donutio",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "main": ["js/jquery.donutio.min.js"],
   "dependencies": {
     "jquery" : ">=1.8.3"
-  }
+  },
+  "ignore": [
+    "example"
+  ]
 }
