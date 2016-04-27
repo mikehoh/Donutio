@@ -1,4 +1,4 @@
-/* Donutio 2.5.1 by Michael Hohlovich */
+/* Donutio 2.5.2 by Michael Hohlovich */
 (function($) {
 
   var init = function(params) {
